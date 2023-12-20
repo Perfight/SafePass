@@ -49,15 +49,6 @@ class MainActivity : ComponentActivity() {
         Dependencies.init(applicationContext)
         val viewModel = MainVM(Dependencies.managerRepository)
         setContent {
-            var categories by remember {
-                mutableStateOf(emptyList<String>())
-            }
-            viewModel.category.observe(this) {
-                categories = it
-            }
-            viewModel.getCategories()
-
-
             val navController = rememberNavController()
 
             NavHost(
@@ -75,7 +66,6 @@ class MainActivity : ComponentActivity() {
             /*
             val c = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             PasswordGeneratorScreen(c)
-            MyUI(categories)
         */
         }
     }

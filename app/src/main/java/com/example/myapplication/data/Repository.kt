@@ -6,13 +6,7 @@ import kotlinx.coroutines.withContext
 
 class Repository (private val managerDao: ManagerDAO) {
 
-    suspend fun getCategories(): List<String> {
-        return withContext(Dispatchers.IO){//для чтения или записи файлов, сетевых операций и т.д.
-            return@withContext managerDao.getCategories() // удобные операторы для комбинирования и управления последовательностями асинхронных операций
-        }
-    }
-
-    suspend fun insertData(username : String, password: String, category: Int, site: String, user: Int){
+    suspend fun insertData(username : String, password: String, category: String, site: String, user: Int){
         return withContext(Dispatchers.IO){
             managerDao.insertData(username, password, category, site, user)
         }

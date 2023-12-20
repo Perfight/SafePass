@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,16 +11,11 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myapplication.data.MainVM
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SaveData(viewModel: MainVM, navController: NavController, context: MainActivity) {
     var website by remember { mutableStateOf("") }
@@ -68,8 +61,6 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: MainActiv
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         )
-
-
 
         OutlinedTextField(
             value = category,
@@ -128,7 +119,7 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: MainActiv
                 text = { Text("Save") },
                 onClick = {
                     viewModel.insertData(
-                        username, password, 1, website, 1
+                        username, password, category, website, 1
                     )
                     Toast.makeText(
                         context,

@@ -11,7 +11,7 @@ object Dependencies {
     }
 
     private val appDatabase: AppDatabase by lazy { //ленивая инициализаци
-        Room.databaseBuilder(applicationContext, AppDatabase::class.java, "aaaa.db") //название под которым он сохранит внутри устроиства
+        Room.databaseBuilder(applicationContext, AppDatabase::class.java, "passmanager.db") //название под которым он сохранит внутри устроиства
             .createFromAsset("manager.db") //создает из шаблона
             .build()
     }

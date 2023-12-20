@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -40,7 +41,7 @@ fun DataDisplay(viewModel: MainVM, navController: NavController, context: MainAc
                 Account(
                     "Loading...",
                     "Loading...",
-                    1,
+                    "Loading...",
                     "Loading...",
                     1,
                     1
@@ -72,13 +73,13 @@ fun columnItem(data : Account, viewModel: MainVM) {
             verticalAlignment = Alignment.CenterVertically) {
             Column(
                 modifier = Modifier
-                    .padding(15.dp)
+                    .padding(14.dp)
             ) {
                 Text(text = data.site, fontSize = 18.sp)
                 Text(text = data.username, fontSize = 12.sp)
             }
             IconButton(onClick = {
-                viewModel.deleteData(data)
+                //viewModel.deleteData(data)
 
             }) {
                 Icon(

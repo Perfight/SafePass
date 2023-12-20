@@ -24,9 +24,15 @@ class Repository (private val managerDao: ManagerDAO) {
         }
     }
 
-    suspend fun deleteAllData(){
+    /*suspend fun deleteAllData(){
         return withContext(Dispatchers.IO){
             managerDao.deleteAllData()
+        }
+    }*/
+
+    suspend fun deleteData(account: Account){
+        return withContext(Dispatchers.IO){
+            managerDao.deleteData(account)
         }
     }
 }

@@ -27,9 +27,15 @@ class MainVM (private val managerRepository: Repository): ViewModel() {
         }
     }
 
-    fun deleteAllData(){
+    /*fun deleteAllData(){
         viewModelScope.launch {
             managerRepository.deleteAllData()
+        }
+    }*/
+
+    fun deleteData(account: Account){
+        viewModelScope.launch {
+            managerRepository.deleteData(account)
         }
     }
 }

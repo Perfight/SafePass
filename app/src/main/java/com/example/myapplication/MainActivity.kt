@@ -36,6 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.data.Dependencies
 import com.example.myapplication.data.MainVM
@@ -56,21 +58,21 @@ class MainActivity : ComponentActivity() {
             viewModel.getCategories()
 
 
-            DataDisplay(viewModel, this)
-            //SaveData(viewModel, this)
-            /*
+            val navController = rememberNavController()
+
             NavHost(
                 navController = navController,
                 startDestination = "main"
             ) {
                 composable("main") {
-
+                    SaveData(viewModel, navController, this@MainActivity)
                 }
-                composable("open") {
-
+                composable("openList") {
+                    DataDisplay(viewModel, navController, this@MainActivity)
                 }
             }
 
+            /*
             val c = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             PasswordGeneratorScreen(c)
             MyUI(categories)
@@ -78,53 +80,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyUI(category: List<String>) {
-    var expanded by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf(" ") }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }
-    ) {
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(), // menuAnchor modifier must be passed to the text field for correctness.
-            readOnly = true,
-            value = selectedCategory,
-            onValueChange = {},
-            label = { Text("Categories") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
-        )
-
-        // menu
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {
-                expanded = false
-            },
-        ) {
-            // menu items
-            category.forEach { selectionOption ->
-                DropdownMenuItem(
-                    text = { Text(selectionOption) },
-                    onClick = {
-                        selectedCategory = selectionOption
-                        expanded = false
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                )
-            }
-        }
-    }
-}
-
 
 @Composable
 fun PasswordGeneratorScreen(clipboard: ClipboardManager) {

@@ -12,11 +12,16 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,14 +31,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.myapplication.data.MainVM
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SaveData(viewModel: MainVM, context: Context) {
+fun SaveData(viewModel: MainVM, navController: NavController, context: MainActivity) {
     var website by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    var selectedCategory by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    var listOfCategories = listOf("Application", "Cloud", "Payment", "Website")
+
     var iconClickable by remember { mutableStateOf(true) }
 
     Column(
@@ -56,6 +68,8 @@ fun SaveData(viewModel: MainVM, context: Context) {
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         )
+
+
 
         OutlinedTextField(
             value = category,
@@ -122,6 +136,7 @@ fun SaveData(viewModel: MainVM, context: Context) {
                         Toast.LENGTH_SHORT
                     ).show()
                     iconClickable = false
+                    navController.navigate("openList")
                 }
             )
         }

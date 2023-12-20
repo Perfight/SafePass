@@ -1,6 +1,7 @@
 package com.example.myapplication.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 
@@ -17,6 +18,9 @@ interface ManagerDAO {
     @Query("SELECT * FROM Account where user = :user")
     suspend fun getData(user: Int) : List<Account>
 
-    @Query("DELETE * FROM Account")
-    suspend fun deleteAllData()
+    //@Query("DELETE * FROM Account")
+    //suspend fun deleteAllData()
+
+    @Delete
+    suspend fun deleteData(account: Account)
 }

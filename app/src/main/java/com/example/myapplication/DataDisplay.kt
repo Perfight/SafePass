@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -54,19 +54,22 @@ fun DataDisplay(viewModel: MainVM, navController: NavController, context: MainAc
     }
     LazyColumn {
         items(account) { data ->
-            columnItem(data, viewModel)
+            columnItem(data, viewModel, navController)
         }
     }
 }
 
-
 @Composable
-fun columnItem(data : Account, viewModel: MainVM) {
+fun columnItem(data : Account, viewModel: MainVM, navController: NavController) {
     val brush = Brush.horizontalGradient(listOf(Color(0xffd6eaf8), Color(0xffd4efdf)))
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(brush, RoundedCornerShape(20.dp))
+            .clickable {
+                var idAccount = data.id
+                navController.navigate("dataOverview/$idAccount")
+            }
     ) {
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -79,8 +82,8 @@ fun columnItem(data : Account, viewModel: MainVM) {
                 Text(text = data.username, fontSize = 12.sp)
             }
             IconButton(onClick = {
-                //viewModel.deleteData(data)
-
+                viewModel.deleteData(data)
+                navController.navigate("openList")
             }) {
                 Icon(
                     modifier = Modifier.defaultMinSize(40.dp, 28.dp),

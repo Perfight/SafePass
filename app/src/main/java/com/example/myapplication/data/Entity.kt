@@ -15,10 +15,10 @@ import androidx.room.PrimaryKey
     ]
 )
 data class Account(
-    @ColumnInfo(name = "username") val username: String,
-    @ColumnInfo(name = "password") val password: String,
-    @ColumnInfo(name = "category") val category: String,
-    @ColumnInfo(name = "site") val site: String,
+    @ColumnInfo(name = "username") var username: String,
+    @ColumnInfo(name = "password") var password: String,
+    @ColumnInfo(name = "category") var category: String,
+    @ColumnInfo(name = "site") var site: String,
     @ColumnInfo(name = "user") val user: Int,
     @PrimaryKey(autoGenerate = true) val id: Int
     )

@@ -1,16 +1,24 @@
 package com.example.myapplication
 
-import android.widget.Toast
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,20 +34,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
 
 @Composable
 fun SaveData(viewModel: MainVM, navController: NavController, context: MainActivity) {
     var website by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    var selectedCategory by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    var listOfCategories = listOf("Application", "Cloud", "Payment", "Website")
+    var selectedCategory by remember { mutableStateOf("") }
+    val listOfCategories = listOf("Application", "Cloud", "Payment", "Website")
 
     var iconClickable by remember { mutableStateOf(true) }
+
+    //val c = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    //PasswordGeneratorScreen(c)
 
     Column(
         modifier = Modifier
@@ -62,21 +73,41 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: MainActiv
                 .padding(vertical = 8.dp)
         )
 
-        OutlinedTextField(
-            value = category,
-            onValueChange = { category = it },
-            label = { Text("Category", color = MaterialTheme.colorScheme.primary) },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        )
+        Box {
+            OutlinedTextField(
+                value = selectedCategory,
+                onValueChange = { selectedCategory = it },
+                readOnly = true,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                label = {Text("Category")},
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Build,
+                        contentDescription = null,
+                        tint = Color.Gray
+                    )
+                },
+                trailingIcon = {
+                    Icon(Icons.Default.KeyboardArrowDown,"contentDescription",
+                        Modifier.clickable { expanded = !expanded })
+                }
+            )
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier
+                    .defaultMinSize(50.dp, 50.dp)
+            ) {
+                listOfCategories.forEach { category ->
+                    DropdownMenuItem(
+                        text = { Text(text = category) },
+                        onClick = {
+                            selectedCategory = category
+                        })
+                }
+            }
+        }
 
         OutlinedTextField(
             value = username,
@@ -113,23 +144,31 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: MainActiv
                 .padding(vertical = 8.dp)
         )
 
-        if (iconClickable) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             ExtendedFloatingActionButton(
-                icon = { Icon(Icons.Filled.Add, contentDescription = "Save") },
-                text = { Text("Save") },
+                icon = { Icon(Icons.Filled.Home, contentDescription = "Save") },
+                text = { Text("Skip") },
                 onClick = {
-                    viewModel.insertData(
-                        username, password, category, website, 1
-                    )
-                    Toast.makeText(
-                        context,
-                        "Новые данные были записаны",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    iconClickable = false
                     navController.navigate("openList")
                 }
             )
+
+            if (iconClickable) {
+                ExtendedFloatingActionButton(
+                    icon = { Icon(Icons.Filled.Add, contentDescription = "Save") },
+                    text = { Text("Save") },
+                    onClick = {
+                        viewModel.insertData(
+                            username, password, selectedCategory, website, 1
+                        )
+                        iconClickable = false
+                        navController.navigate("openList")
+                    }
+                )
+            }
         }
     }
 }

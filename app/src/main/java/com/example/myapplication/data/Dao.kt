@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface ManagerDAO {
@@ -20,4 +21,10 @@ interface ManagerDAO {
 
     @Delete
     suspend fun deleteData(account: Account)
+
+    @Query("SELECT * FROM Account where id = :id")
+    suspend fun getAccountData(id: Int) : Account
+
+    @Update
+    suspend fun updateAccount(account: Account)
 }

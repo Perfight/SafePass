@@ -29,4 +29,16 @@ class Repository (private val managerDao: ManagerDAO) {
             managerDao.deleteData(account)
         }
     }
+
+    suspend fun getAccountData(id : Int) : Account{
+        return withContext(Dispatchers.IO){
+            return@withContext managerDao.getAccountData(id)
+        }
+    }
+
+    suspend fun updateAccount(account: Account){
+        return withContext(Dispatchers.IO){
+            managerDao.updateAccount(account)
+        }
+    }
 }

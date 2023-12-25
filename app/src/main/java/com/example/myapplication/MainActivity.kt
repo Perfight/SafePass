@@ -2,9 +2,11 @@ package com.example.myapplication
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,10 +34,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.myapplication.data.Dependencies
 import com.example.myapplication.data.MainVM
-import java.security.MessageDigest
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Dependencies.init(applicationContext)
@@ -48,7 +50,7 @@ class MainActivity : ComponentActivity() {
                 startDestination = "main"
             ) {
                 composable("main") {
-                    SaveData(viewModel, navController, this@MainActivity)
+                    SaveData(viewModel, navController)
                 }
                 composable("openList") {
                     DataDisplay(viewModel, navController, this@MainActivity)
@@ -62,11 +64,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-fun hashValue(value: String): String {
-    val messageDigest = MessageDigest.getInstance("SHA-256")
-    val hashBytes = messageDigest.digest(value.toByteArray())
-    return hashBytes.joinToString("") { "%02x".format(it) }
 }
 
 @Composable

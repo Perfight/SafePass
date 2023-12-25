@@ -1,5 +1,8 @@
 package com.example.myapplication
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,6 +31,7 @@ import androidx.navigation.NavController
 import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DataOverview(viewModel: MainVM, navController: NavController, context: MainActivity, argumentValue : Int) {
     viewModel.getAccountData(argumentValue)
@@ -50,9 +54,13 @@ fun DataOverview(viewModel: MainVM, navController: NavController, context: MainA
     }
 
     var newPass by remember {
-        mutableStateOf(account.password)
+        mutableStateOf(AESUtil.decrypt(account.password))
     }
 
+
+    if (newPass != ""){
+        Log.e("Check notNull", newPass)
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()

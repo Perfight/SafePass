@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,11 +36,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
+import javax.crypto.SecretKey
 
+@SuppressLint("NewApi")
 @Composable
-fun SaveData(viewModel: MainVM, navController: NavController, context: MainActivity) {
+fun SaveData(viewModel: MainVM, navController: NavController) {
     var website by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -48,10 +51,11 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: MainActiv
     val listOfCategories = listOf("Application", "Cloud", "Payment", "Website")
 
     var iconClickable by remember { mutableStateOf(true) }
-
     //val c = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     //PasswordGeneratorScreen(c)
 
+    var key : SecretKey = KeyStoreUtil.generateKey()
+    Log.e("key saveData", key.toString())
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -162,7 +166,7 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: MainActiv
                     text = { Text("Save") },
                     onClick = {
                         viewModel.insertData(
-                            username, password, selectedCategory, website, 1
+                            username, AESUtil.encrypt(password, key), selectedCategory, website, 1
                         )
                         iconClickable = false
                         navController.navigate("openList")

@@ -1,6 +1,5 @@
 package com.example.myapplication.data
 
-import com.example.myapplication.data.ManagerDAO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -39,6 +38,36 @@ class Repository (private val managerDao: ManagerDAO) {
     suspend fun updateAccount(account: Account){
         return withContext(Dispatchers.IO){
             managerDao.updateAccount(account)
+        }
+    }
+
+    suspend fun getUserInfo(id: Int) : User{
+        return withContext(Dispatchers.IO){
+            return@withContext managerDao.getUserInfo(id)
+        }
+    }
+
+    suspend fun getUserList() : List<User>{
+        return withContext(Dispatchers.IO){
+            return@withContext managerDao.getUserList()
+        }
+    }
+
+    suspend fun insertUser(name : String, email : String, password: String){
+        return withContext(Dispatchers.IO){
+            managerDao.insertUser(name, email, password)
+        }
+    }
+
+    suspend fun getAuthInfo(name: String) : User{
+        return withContext(Dispatchers.IO){
+            managerDao.getAuthInfo(name)
+        }
+    }
+
+    suspend fun divideByCategory(category: String, user: Int) : List<Account> {
+        return withContext(Dispatchers.IO){
+            return@withContext managerDao.divideByCategory(category, user)
         }
     }
 }

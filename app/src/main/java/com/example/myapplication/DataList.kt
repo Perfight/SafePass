@@ -13,9 +13,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +37,7 @@ import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
 
 @Composable
-fun DataDisplay(viewModel: MainVM, navController: NavController, context: MainActivity) {
+fun DataList(viewModel: MainVM, navController: NavController, context: MainActivity) {
     viewModel.getData(1)
     var account by remember {
         mutableStateOf(
@@ -52,22 +56,35 @@ fun DataDisplay(viewModel: MainVM, navController: NavController, context: MainAc
     viewModel.accounts.observe(context) {
         account = it
     }
-    LazyColumn {
-        items(account) { data ->
-            columnItem(data, viewModel, navController)
+    Scaffold(
+        floatingActionButton =
+        {
+            FloatingActionButton(
+                content = { Icon(imageVector = Icons.Default.Add, contentDescription = "add") },
+                onClick = { navController.navigate("addData") }
+            )
+            FabPosition.End
+        }
+    ) {
+        it.calculateBottomPadding()
+        LazyColumn {
+            items(account) { data ->
+                columnItem(data, viewModel, navController)
+            }
         }
     }
+
 }
 
 @Composable
 fun columnItem(data : Account, viewModel: MainVM, navController: NavController) {
-    val brush = Brush.horizontalGradient(listOf(Color(0xffd6eaf8), Color(0xffd4efdf)))
+    val brush = Brush.horizontalGradient(listOf(Color.LightGray, Color.White))
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(brush, RoundedCornerShape(20.dp))
             .clickable {
-                var idAccount = data.id
+                val idAccount = data.id
                 navController.navigate("dataOverview/$idAccount")
             }
     ) {

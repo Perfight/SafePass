@@ -53,9 +53,7 @@ fun DataOverview(viewModel: MainVM, navController: NavController, context: MainA
         account = it
     }
 
-    var newPass by remember {
-        mutableStateOf(AESUtil.decrypt(account.password))
-    }
+    var newPass by remember { mutableStateOf(account.password) }
 
 
     if (newPass != ""){

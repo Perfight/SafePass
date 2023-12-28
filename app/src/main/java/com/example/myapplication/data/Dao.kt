@@ -2,7 +2,6 @@ package com.example.myapplication.data
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 
@@ -27,4 +26,19 @@ interface ManagerDAO {
 
     @Update
     suspend fun updateAccount(account: Account)
+
+    @Query("SELECT * FROM User WHERE idUser = :id")
+    suspend fun getUserInfo(id : Int) : User
+
+    @Query("SELECT * FROM User")
+    suspend fun getUserList() : List<User>
+
+    @Query("INSERT INTO User (name, email, password) VALUES (:name, :email, :password)")
+    suspend fun insertUser(name : String, email : String, password: String)
+
+    @Query("SELECT * FROM User WHERE name = :name")
+    suspend fun getAuthInfo(name : String) : User
+
+    @Query("SELECT * FROM Account WHERE category = :category AND user = :user")
+    suspend fun divideByCategory(category: String, user: Int) : List<Account>
 }

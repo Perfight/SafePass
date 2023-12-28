@@ -50,10 +50,13 @@ class MainActivity : ComponentActivity() {
                 startDestination = "main"
             ) {
                 composable("main") {
-                    SaveData(viewModel, navController)
+                    HomeScreen(viewModel, navController, this@MainActivity)
+                }
+                composable("addData"){
+                    SaveData(viewModel, navController, this@MainActivity)
                 }
                 composable("openList") {
-                    DataDisplay(viewModel, navController, this@MainActivity)
+                    DataList(viewModel, navController, this@MainActivity)
                 }
                 composable("dataOverview/{idAccount}",
                     arguments = listOf(navArgument("idAccount") { type = NavType.IntType })
@@ -61,6 +64,14 @@ class MainActivity : ComponentActivity() {
                     val argumentValue = backStackEntry.arguments?.getInt("idAccount") ?: 1
                     DataOverview(viewModel, navController, this@MainActivity, argumentValue)
                 }
+                /*
+                * HomeScreen() -- if authorisized
+                * SaveData() -- after home|overview
+                * DataDisplay() -- after home -- list
+                * DataOverview() -- last activity --
+                * Auth() -- first activity|home
+                * Register() -- auth -> register -> home
+                * */
             }
         }
     }

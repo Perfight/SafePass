@@ -1,7 +1,7 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
-import android.util.Log
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,11 +37,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myapplication.data.MainVM
-import javax.crypto.SecretKey
 
 @SuppressLint("NewApi")
 @Composable
-fun SaveData(viewModel: MainVM, navController: NavController) {
+fun SaveData(viewModel: MainVM, navController: NavController, context : Context) {
     var website by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -54,8 +53,6 @@ fun SaveData(viewModel: MainVM, navController: NavController) {
     //val c = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     //PasswordGeneratorScreen(c)
 
-    var key : SecretKey = KeyStoreUtil.generateKey()
-    Log.e("key saveData", key.toString())
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -166,7 +163,7 @@ fun SaveData(viewModel: MainVM, navController: NavController) {
                     text = { Text("Save") },
                     onClick = {
                         viewModel.insertData(
-                            username, AESUtil.encrypt(password, key), selectedCategory, website, 1
+                            username, password, selectedCategory, website, 1
                         )
                         iconClickable = false
                         navController.navigate("openList")

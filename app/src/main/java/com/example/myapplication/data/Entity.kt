@@ -27,5 +27,6 @@ data class Account(
 data class User(
     @PrimaryKey(autoGenerate = true) val idUser: Int,
     @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "email") val email: String,
     @ColumnInfo(name = "password") val password: String
 )

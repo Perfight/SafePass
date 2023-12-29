@@ -1,17 +1,14 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
-import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -33,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.myapplication.data.Dependencies
 import com.example.myapplication.data.MainVM
+import com.example.myapplication.encrypt.SecurityEncrypt
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
@@ -41,14 +38,25 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Dependencies.init(applicationContext)
         val viewModel = MainVM(Dependencies.managerRepository)
+        var start = "main"
+        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+
         setContent {
             val navController = rememberNavController()
-
+            if (SecurityEncrypt(this@MainActivity).containsKey("user_id")){
+                start = "home"
+            }
             NavHost(
                 navController = navController,
-                startDestination = "main"
+                startDestination = start
             ) {
                 composable("main") {
+                    Auth(viewModel, navController, this@MainActivity)
+                }
+                composable("registration"){
+                    Register(viewModel, navController, this@MainActivity)
+                }
+                composable("home"){
                     HomeScreen(viewModel, navController, this@MainActivity)
                 }
                 composable("addData"){
@@ -61,15 +69,15 @@ class MainActivity : ComponentActivity() {
                     arguments = listOf(navArgument("idAccount") { type = NavType.IntType })
                     ){backStackEntry ->
                     val argumentValue = backStackEntry.arguments?.getInt("idAccount") ?: 1
-                    DataOverview(viewModel, navController, this@MainActivity, argumentValue)
+                    DataOverview(viewModel, navController, this@MainActivity, clipboard, argumentValue)
                 }
                 /*
                 * HomeScreen() -- if authorisized
                 * SaveData() -- after home|overview
                 * DataDisplay() -- after home -- list
                 * DataOverview() -- last activity --
-                * !!!!! Auth() -- first activity|home
-                * !!!!! Register() -- auth -> register -> home
+                * Auth() -- first activity|home
+                * Register() -- auth -> register -> home
                 * */
             }
         }
@@ -82,10 +90,7 @@ fun PasswordGeneratorScreen(clipboard: ClipboardManager) {
     var copiedToClipboard by remember { mutableStateOf(false) }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+
     ) {
         OutlinedTextField(
             value = password,
@@ -111,17 +116,7 @@ fun PasswordGeneratorScreen(clipboard: ClipboardManager) {
         ) {
             Icon(imageVector = Icons.Default.Refresh, contentDescription = null)
         }
-        IconButton(
-            onClick = {
-                clipboard.setPrimaryClip(ClipData.newPlainText("password", password))
-                copiedToClipboard = true
-            },
-            modifier = Modifier
-                .size(48.dp)
-                .padding(8.dp)
-        ) {
-            Icon(imageVector = Icons.Default.Done, contentDescription = null)
-        }
+
 
         if (copiedToClipboard) {
             Text(

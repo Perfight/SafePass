@@ -3,10 +3,8 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,7 +14,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -57,8 +54,6 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: Context) 
     val listOfCategories = listOf("Application", "Cloud", "Payment", "Website")
 
     var iconClickable by remember { mutableStateOf(true) }
-    //val c = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    //PasswordGeneratorScreen(c)
 
     Scaffold(
         topBar = {
@@ -74,11 +69,11 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: Context) 
             })
         }
     ) {
-        it.calculateTopPadding()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(it.calculateTopPadding())
+                .padding(6.dp)
         ) {
             OutlinedTextField(
                 value = website,
@@ -103,7 +98,7 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: Context) 
                     readOnly = true,
                     modifier = Modifier
                         .fillMaxWidth(),
-                    label = { Text("Category") },
+                    label = { Text("Category", color = MaterialTheme.colorScheme.primary) },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Build,
@@ -167,36 +162,22 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: Context) 
                     .padding(vertical = 8.dp)
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                ExtendedFloatingActionButton(
-                    icon = { Icon(Icons.Filled.Home, contentDescription = "Save") },
-                    text = { Text("Skip") },
-                    onClick = {
-                        navController.navigate("openList")
-                    }
-                )
 
-                if (iconClickable) {
-                    ExtendedFloatingActionButton(
-                        icon = { Icon(Icons.Filled.Add, contentDescription = "Save") },
-                        text = { Text("Save") },
-                        onClick = {
-                            viewModel.insertData(
-                                username,
-                                SecurityEncrypt(context).putDataPass(password),
-                                selectedCategory,
-                                website,
-                                1
-                            )
-                            iconClickable = false
-                            navController.navigate("openList")
-                        }
+            ExtendedFloatingActionButton(
+                icon = { Icon(Icons.Filled.Add, contentDescription = "Save") },
+                text = { Text("Save") },
+                onClick = {
+                    viewModel.insertData(
+                        username,
+                        SecurityEncrypt(context).putDataPass(password),
+                        selectedCategory,
+                        website,
+                        SecurityEncrypt(context).getData("user_id", 0)
                     )
+                    iconClickable = false
+                    navController.navigate("openList")
                 }
-            }
+            )
         }
     }
 }

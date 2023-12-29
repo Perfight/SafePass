@@ -27,14 +27,18 @@ class SecurityEncrypt(context: Context){
         return key
     }
 
-    fun putData(key : String, value: String?) {
+    fun putData(key : String, value: Int) {
         val editor = sharedPreferences.edit()
-        editor.putString(key, value).apply()
+        editor.putInt(key, value).apply()
         editor.commit()
     }
 
-    fun getData(key: String, defaultValue: String?): String? {
+    fun getDataPass(key: String, defaultValue: String?): String? {
         return sharedPreferences.getString(key, defaultValue)
+    }
+
+    fun getData(key: String, defaultValue: Int): Int {
+        return sharedPreferences.getInt(key, defaultValue)
     }
 
     fun containsKey(key: String): Boolean {

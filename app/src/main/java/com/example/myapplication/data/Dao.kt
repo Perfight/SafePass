@@ -15,9 +15,6 @@ interface ManagerDAO {
     @Query("SELECT * FROM Account where user = :user")
     suspend fun getData(user: Int) : List<Account>
 
-    //@Query("DELETE * FROM Account")
-    //suspend fun deleteAllData()
-
     @Delete
     suspend fun deleteData(account: Account)
 
@@ -36,12 +33,9 @@ interface ManagerDAO {
     @Query("INSERT INTO User (name, email, password) VALUES (:name, :email, :password)")
     suspend fun insertUser(name : String, email : String, password: String)
 
-    @Query("SELECT COUNT(*) from account WHERE category=:category")
-    suspend fun getCount(category: String): Int
+    @Query("SELECT COUNT(*) from account WHERE category=:category AND user = :user")
+    suspend fun getCount(category: String, user : Int): Int
 
     @Query("SELECT * FROM User WHERE name = :name")
     suspend fun getAuthInfo(name : String) : User
-
-    @Query("SELECT * FROM Account WHERE category = :category AND user = :user")
-    suspend fun divideByCategory(category: String, user: Int) : List<Account>
 }

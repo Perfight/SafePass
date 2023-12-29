@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -32,21 +33,27 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
 import com.example.myapplication.data.User
+import com.example.myapplication.encrypt.SecurityEncrypt
 
 @Composable
 fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainActivity){
-    viewModel.getUserInfo(1)
+    val userId= SecurityEncrypt(context).getData("user_id", 0)
+    viewModel.getUserInfo(userId)
     var user by remember { mutableStateOf(User(0, "","","")) }
-    viewModel.userData.observe(context){ user = it }
-    viewModel.getData(1)
+    viewModel.userData.observe(context){
+        user = it
+    }
+    viewModel.getData(userId)
     var all by remember { mutableStateOf(emptyList<Account>())}
     viewModel.accounts.observe(context){all = it}
-    viewModel.getAccountCounter()
+    viewModel.getAccountCounter(userId)
 
     var divide by remember {
         mutableStateOf(emptyMap<String, Int>())
@@ -65,7 +72,7 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Text("Hello, " + user.name)
+        Text(text = "Hello, ${user.name}", fontSize = 28.sp, fontStyle = FontStyle.Italic)
         Spacer(Modifier.fillMaxHeight(0.1f))
         LazyRow(
             Modifier
@@ -75,7 +82,7 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
             item {
                 Card(
                     modifier = Modifier.clickable {
-                                                  navController.navigate("openList")
+                        navController.navigate("openList")
                     },
                     border = BorderStroke(2.dp, Color.LightGray)
                 ) {
@@ -85,12 +92,11 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
-                            bitmap = ImageBitmap.imageResource(R.drawable.lock),
+                            imageVector = Icons.Default.List,
                             contentDescription = null,
                             modifier = Modifier.size(180.dp, 180.dp)
                         )
                         Text(text = "All")
-                        //val size = jopa["Application"]!! + jopa["Cloud"]!! + jopa["Payment"]!! + jopa["Website"]!!
                         Text(text = "Contains : " + all.size)
                     }
                 }
@@ -184,7 +190,7 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
             .fillMaxWidth()
             .fillMaxHeight(0.15f)
             .clickable {
-/*TODO*/
+                /*TODO*/
             }
             .background(
                 Brush.verticalGradient(listOf(Color(0xFFfae1f4), Color.White)),

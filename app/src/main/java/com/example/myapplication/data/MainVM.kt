@@ -12,6 +12,7 @@ class MainVM(private val managerRepository: Repository) : ViewModel() {
     var userData: MutableLiveData<User> = MutableLiveData()
     var userList: MutableLiveData<List<User>> = MutableLiveData()
     var listCategory : MutableLiveData<List<Account>> = MutableLiveData()
+    var currentUser : MutableLiveData<User> = MutableLiveData()
 
     fun insertData(username: String, password: String, category: String, site: String, user: Int) {
         viewModelScope.launch {
@@ -37,9 +38,9 @@ class MainVM(private val managerRepository: Repository) : ViewModel() {
         }
     }
 
-    fun getAccountCounter(){
+    fun getAccountCounter(id: Int){
         viewModelScope.launch {
-            accountCounterList.value = managerRepository.getCounters()
+            accountCounterList.value = managerRepository.getCounters(id)
         }
     }
 
@@ -75,13 +76,7 @@ class MainVM(private val managerRepository: Repository) : ViewModel() {
 
     fun getAuthInfo(name: String) {
         viewModelScope.launch {
-            managerRepository.getAuthInfo(name)
-        }
-    }
-
-    fun divideByCategory(category: String, user: Int){
-        viewModelScope.launch{
-            listCategory.value = managerRepository.divideByCategory(category, user)
+            currentUser.value = managerRepository.getAuthInfo(name)
         }
     }
 }

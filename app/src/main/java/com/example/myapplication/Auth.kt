@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,11 +31,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.myapplication.data.MainVM
+import com.example.myapplication.data.User
+import com.example.myapplication.encrypt.SecurityEncrypt
+import java.math.BigInteger
+import java.security.MessageDigest
 
 @Composable
-fun Auth() {
+fun Auth(viewModel: MainVM, navController: NavController, context: MainActivity) {
     var username by remember {
         mutableStateOf("")
     }
@@ -42,11 +48,12 @@ fun Auth() {
         mutableStateOf("")
     }
 
+    var intendedUser: User
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                Brush.horizontalGradient(listOf(Color(0xFFb7e8d0), Color.White)),
+                Brush.verticalGradient(listOf(Color(0xFFe8b7dd), Color.White)),
                 shape = RoundedCornerShape(10.dp)
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -98,14 +105,36 @@ fun Auth() {
                 icon = { Icon(Icons.Filled.Check, contentDescription = "Log in") },
                 text = { Text("Log in") },
                 onClick = {
-                    /*TODO*/
+                    if (username != "" && password != "") {
+                        viewModel.getAuthInfo(username)
+                        viewModel.currentUser.observe(context) {
+                            intendedUser = it
+                            if (hash(password) == intendedUser.password) {
+                                SecurityEncrypt(context).putData("user_id", intendedUser.idUser)
+                                navController.navigate("home")
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Check your data!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "You're a bad person...",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             )
             ExtendedFloatingActionButton(
                 icon = { Icon(Icons.Filled.Person, contentDescription = "Register") },
                 text = { Text("Register") },
                 onClick = {
-                    /*TODO*/
+                    navController.navigate("registration")
                 }
             )
         }
@@ -114,8 +143,7 @@ fun Auth() {
 }
 
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun PreviewAuth() {
-    Auth()
+fun hash(input: String): String {
+    val md = MessageDigest.getInstance("MD5")
+    return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
 }

@@ -1,10 +1,14 @@
 package com.example.myapplication
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -29,6 +33,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -43,6 +49,7 @@ fun DataOverview(
     viewModel: MainVM,
     navController: NavController,
     context: MainActivity,
+    clipboard: ClipboardManager,
     argumentValue: Int
 ) {
     viewModel.getAccountData(argumentValue)
@@ -61,7 +68,6 @@ fun DataOverview(
     }
 
 
-
     var newPass by remember {
         mutableStateOf(
             "0"
@@ -69,7 +75,7 @@ fun DataOverview(
     }
     viewModel.accountInformation.observe(context) {
         account = it
-        newPass = SecurityEncrypt(context).getData(
+        newPass = SecurityEncrypt(context).getDataPass(
             account.password,
             "0"
         )!!
@@ -89,18 +95,16 @@ fun DataOverview(
             )
         }
     ) {
-        it.calculateTopPadding()
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = it.calculateTopPadding())
                 .padding(16.dp)
         ) {
             OutlinedTextField(
                 value = account.site,
                 onValueChange = { account.site = it },
                 readOnly = true,
-                label = { Text("Site", color = MaterialTheme.colorScheme.primary) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Email,
@@ -119,7 +123,6 @@ fun DataOverview(
                 readOnly = true,
                 modifier = Modifier
                     .fillMaxWidth(),
-                label = { Text("Category") },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Build,
@@ -133,7 +136,6 @@ fun DataOverview(
                 value = account.username,
                 onValueChange = { account.username = it },
                 readOnly = true,
-                label = { Text("Username", color = MaterialTheme.colorScheme.primary) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Person,
@@ -145,6 +147,8 @@ fun DataOverview(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
             )
+
+
 
             OutlinedTextField(
                 value = newPass!!,
@@ -164,8 +168,26 @@ fun DataOverview(
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 8.dp),
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            clipboard.setPrimaryClip(ClipData.newPlainText("password", newPass))
+                            Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT)
+                                .show()
+                        },
+                        modifier = Modifier
+                            .size(48.dp)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            bitmap = ImageBitmap.imageResource(R.drawable.copy),
+                            contentDescription = null
+                        )
+                    }
+                }
             )
+
 
             ExtendedFloatingActionButton(
                 icon = { Icon(Icons.Filled.Add, contentDescription = "Save") },

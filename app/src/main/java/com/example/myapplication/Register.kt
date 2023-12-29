@@ -25,11 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.myapplication.data.MainVM
 
 @Composable
-fun Register() {
+fun Register(viewModel: MainVM, navController: NavController, context: MainActivity) {
     var username by remember {
         mutableStateOf("")
     }
@@ -43,7 +46,7 @@ fun Register() {
         modifier = Modifier
             .fillMaxSize()
             .background(
-                Brush.horizontalGradient(listOf(Color(0xFFb7e8d0), Color.White)),
+                Brush.horizontalGradient(listOf(Color(0xFFe8b7dd), Color.White)),
                 shape = RoundedCornerShape(10.dp)
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,7 +54,7 @@ fun Register() {
 
     ) {
         Spacer(modifier = Modifier.fillMaxHeight(0.1f))
-        Text(text = "Register")
+        Text(text = "Registration", fontSize = 28.sp, fontStyle = FontStyle.Italic)
         Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         TextField(
             value = username,
@@ -108,16 +111,11 @@ fun Register() {
             icon = { Icon(Icons.Filled.Person, contentDescription = "Register") },
             text = { Text("Register") },
             onClick = {
-                /*TODO*/
+                viewModel.insertUser(username, email, hash(password))
+                navController.navigate("main")
             }
         )
 
         Spacer(modifier = Modifier.fillMaxHeight(0.2f))
     }
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun PreviewRegister() {
-    Register()
 }

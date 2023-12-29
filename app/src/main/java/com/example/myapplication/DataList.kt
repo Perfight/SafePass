@@ -39,12 +39,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
+import com.example.myapplication.encrypt.SecurityEncrypt
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DataList(viewModel: MainVM, navController: NavController, context: MainActivity) {
-    viewModel.getData(1)
+    viewModel.getData(SecurityEncrypt(context).getData("user_id", 1))
     var account by remember {
         mutableStateOf(
             listOf(
@@ -67,7 +68,7 @@ fun DataList(viewModel: MainVM, navController: NavController, context: MainActiv
             TopAppBar(
                 modifier = Modifier.background(Color.White), title = {
                     IconButton(onClick = {
-                        navController.navigate("openList")
+                        navController.navigate("home")
                     }) {
                         Icon(
                             Icons.Filled.ArrowBack,
@@ -97,7 +98,7 @@ fun DataList(viewModel: MainVM, navController: NavController, context: MainActiv
 
 @Composable
 fun columnItem(data: Account, viewModel: MainVM, navController: NavController) {
-    val brush = Brush.horizontalGradient(listOf(Color.LightGray, Color.White))
+    val brush = Brush.horizontalGradient(listOf(Color(0xFFe8b7dd), Color.White))
     Box(
         modifier = Modifier
             .fillMaxWidth()

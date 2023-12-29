@@ -1,11 +1,11 @@
-package com.example.myapplication
+package com.example.myapplication.encrypt
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
-class SecurityData(context: Context){
+class SecurityEncrypt(context: Context){
 
     private var masterKey: MasterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -19,9 +19,17 @@ class SecurityData(context: Context){
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
-    fun putData(key: String, value: String?){
+    fun putDataPass(value: String?) : String {
         val editor = sharedPreferences.edit()
-        editor.putString(key, value).commit()
+        val key = generateRandomString()
+        editor.putString(key, value).apply()
+        editor.commit()
+        return key
+    }
+
+    fun putData(key : String, value: String?) {
+        val editor = sharedPreferences.edit()
+        editor.putString(key, value).apply()
         editor.commit()
     }
 
@@ -37,4 +45,10 @@ class SecurityData(context: Context){
         val editor = sharedPreferences.edit()
         editor.clear().apply()
     }
+}
+fun generateRandomString(): String {
+    val alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    val uniqueChars = alphabet.toList().shuffled().distinct().joinToString("")
+
+    return (1..8).map { uniqueChars.random() }.joinToString("")
 }

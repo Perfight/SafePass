@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
+import com.example.myapplication.encrypt.SecurityEncrypt
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -53,12 +53,9 @@ fun DataOverview(viewModel: MainVM, navController: NavController, context: MainA
         account = it
     }
 
-    var newPass by remember { mutableStateOf(account.password) }
+    var newPass by remember { mutableStateOf(SecurityEncrypt(context).getData(account.password, "0")) }
 
 
-    if (newPass != ""){
-        Log.e("Check notNull", newPass)
-    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -115,7 +112,7 @@ fun DataOverview(viewModel: MainVM, navController: NavController, context: MainA
         )
 
         OutlinedTextField(
-            value = newPass,
+            value = newPass!!,
             onValueChange = { newPass = it
             },
             label = { Text("Password", color = MaterialTheme.colorScheme.primary) },
@@ -138,7 +135,7 @@ fun DataOverview(viewModel: MainVM, navController: NavController, context: MainA
             icon = { Icon(Icons.Filled.Add, contentDescription = "Save") },
             text = { Text("Save") },
             onClick = {
-                account.password = newPass
+                account.password = SecurityEncrypt(context).putDataPass(newPass!!)
                 viewModel.updateAccount(account)
                 navController.navigate("openList")
             }

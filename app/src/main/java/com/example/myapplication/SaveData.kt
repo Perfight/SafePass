@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myapplication.data.MainVM
+import com.example.myapplication.encrypt.SecurityEncrypt
 
 @SuppressLint("NewApi")
 @Composable
@@ -163,7 +164,7 @@ fun SaveData(viewModel: MainVM, navController: NavController, context : Context)
                     text = { Text("Save") },
                     onClick = {
                         viewModel.insertData(
-                            username, password, selectedCategory, website, 1
+                            username, SecurityEncrypt(context).putDataPass(password), selectedCategory, website, 1
                         )
                         iconClickable = false
                         navController.navigate("openList")

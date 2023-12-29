@@ -1,12 +1,11 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,7 +36,7 @@ import com.example.myapplication.data.MainVM
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Dependencies.init(applicationContext)
@@ -69,8 +68,8 @@ class MainActivity : ComponentActivity() {
                 * SaveData() -- after home|overview
                 * DataDisplay() -- after home -- list
                 * DataOverview() -- last activity --
-                * Auth() -- first activity|home
-                * Register() -- auth -> register -> home
+                * !!!!! Auth() -- first activity|home
+                * !!!!! Register() -- auth -> register -> home
                 * */
             }
         }

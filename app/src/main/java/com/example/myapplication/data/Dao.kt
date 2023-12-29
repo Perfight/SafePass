@@ -36,6 +36,9 @@ interface ManagerDAO {
     @Query("INSERT INTO User (name, email, password) VALUES (:name, :email, :password)")
     suspend fun insertUser(name : String, email : String, password: String)
 
+    @Query("SELECT COUNT(*) from account WHERE category=:category")
+    suspend fun getCount(category: String): Int
+
     @Query("SELECT * FROM User WHERE name = :name")
     suspend fun getAuthInfo(name : String) : User
 

@@ -64,7 +64,16 @@ class Repository (private val managerDao: ManagerDAO) {
             managerDao.getAuthInfo(name)
         }
     }
-
+    suspend fun getCounters(): Map<String, Int> {
+        return withContext(Dispatchers.IO){
+            return@withContext mapOf<String, Int>(
+                Pair("Application", managerDao.getCount("Application")),
+                Pair("Cloud", managerDao.getCount("Cloud")),
+                Pair("Payment", managerDao.getCount("Payment")),
+                Pair("Website", managerDao.getCount("Website"))
+            )
+        }
+    }
     suspend fun divideByCategory(category: String, user: Int) : List<Account> {
         return withContext(Dispatchers.IO){
             return@withContext managerDao.divideByCategory(category, user)

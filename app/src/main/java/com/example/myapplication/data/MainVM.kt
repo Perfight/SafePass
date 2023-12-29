@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 
 class MainVM(private val managerRepository: Repository) : ViewModel() {
     var accounts: MutableLiveData<List<Account>> = MutableLiveData()
+    var accountCounterList: MutableLiveData<Map<String, Int>> = MutableLiveData()
     var accountInformation: MutableLiveData<Account> = MutableLiveData()
     var userData: MutableLiveData<User> = MutableLiveData()
     var userList: MutableLiveData<List<User>> = MutableLiveData()
@@ -33,6 +34,12 @@ class MainVM(private val managerRepository: Repository) : ViewModel() {
     fun deleteData(account: Account) {
         viewModelScope.launch {
             managerRepository.deleteData(account)
+        }
+    }
+
+    fun getAccountCounter(){
+        viewModelScope.launch {
+            accountCounterList.value = managerRepository.getCounters()
         }
     }
 

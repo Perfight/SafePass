@@ -44,17 +44,16 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
     var user by remember { mutableStateOf(User(0, "","","")) }
     viewModel.userData.observe(context){ user = it }
     viewModel.getData(1)
-    var all by remember { mutableStateOf(listOf(Account("", "", "", "", 0, 0)))}
+    var all by remember { mutableStateOf(emptyList<Account>())}
     viewModel.accounts.observe(context){all = it}
+    viewModel.getAccountCounter()
 
-    var app by remember { mutableStateOf(listOf(Account("", "", "", "", 0, 0)))}
-    app = Length(viewModel, 1, "Application", context)
-    var cloud by remember { mutableStateOf(listOf(Account("", "", "", "", 0, 0)))}
-    cloud = Length(viewModel, 1, "Cloud", context)
-    var web by remember { mutableStateOf(listOf(Account("", "", "", "", 0, 0)))}
-    web = Length(viewModel, 1, "Website", context)
-    var pay by remember { mutableStateOf(listOf(Account("", "", "", "", 0, 0)))}
-    pay = Length(viewModel, 1, "Payment", context)
+    var divide by remember {
+        mutableStateOf(emptyMap<String, Int>())
+    }
+    viewModel.accountCounterList.observe(context){
+        divide = it
+    }
 
     Column(
         modifier = Modifier
@@ -91,6 +90,7 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
                             modifier = Modifier.size(180.dp, 180.dp)
                         )
                         Text(text = "All")
+                        //val size = jopa["Application"]!! + jopa["Cloud"]!! + jopa["Payment"]!! + jopa["Website"]!!
                         Text(text = "Contains : " + all.size)
                     }
                 }
@@ -112,7 +112,7 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
                             modifier = Modifier.size(180.dp, 180.dp)
                         )
                         Text(text = "Application")
-                        Text(text = "Contains : " + app.size)
+                        Text(text = "Contains: " + divide["Application"].toString())
                     }
                 }
             }
@@ -133,7 +133,7 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
                             modifier = Modifier.size(180.dp, 180.dp)
                         )
                         Text(text = "Cloud")
-                        Text(text = "Contains : " + cloud.size)
+                        Text(text = "Contains : " + divide["Cloud"].toString())
                     }
                 }
             }
@@ -154,7 +154,7 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
                             modifier = Modifier.size(180.dp, 180.dp)
                         )
                         Text(text = "Payment")
-                        Text(text = "Contains : " + pay.size)
+                        Text(text = "Contains : " + divide["Payment"].toString())
                     }
                 }
             }
@@ -175,7 +175,7 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
                             modifier = Modifier.size(180.dp, 180.dp)
                         )
                         Text(text = "Website")
-                        Text(text = "Contains : " + web.size)
+                        Text(text = "Contains : " + divide["Website"].toString())
                     }
                 }
             }
@@ -204,12 +204,4 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
             }
         }
     }
-}
-
-@Composable
-fun Length(viewModel: MainVM, id: Int, category: String, context: MainActivity) : List<Account>{
-    viewModel.divideByCategory(category, id)
-    var list by remember { mutableStateOf(listOf(Account("", "", "", "", 0, 0)))}
-    viewModel.accounts.observe(context){ list = it}
-    return list
 }

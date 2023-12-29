@@ -8,15 +8,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,9 +36,15 @@ import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
 import com.example.myapplication.encrypt.SecurityEncrypt
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DataOverview(viewModel: MainVM, navController: NavController, context: MainActivity, argumentValue : Int) {
+fun DataOverview(
+    viewModel: MainVM,
+    navController: NavController,
+    context: MainActivity,
+    argumentValue: Int
+) {
     viewModel.getAccountData(argumentValue)
 
     var account by remember {
@@ -49,96 +60,122 @@ fun DataOverview(viewModel: MainVM, navController: NavController, context: MainA
         )
     }
 
+
+
+    var newPass by remember {
+        mutableStateOf(
+            "0"
+        )
+    }
     viewModel.accountInformation.observe(context) {
         account = it
+        newPass = SecurityEncrypt(context).getData(
+            account.password,
+            "0"
+        )!!
     }
-
-    var newPass by remember { mutableStateOf(SecurityEncrypt(context).getData(account.password, "0")) }
-
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                IconButton(onClick = {
+                    navController.navigate("openList")
+                }) {
+                    Icon(
+                        Icons.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            }
+            )
+        }
     ) {
-        OutlinedTextField(
-            value = account.site,
-            onValueChange = { account.site = it },
-            readOnly = true,
-            label = { Text("Site", color = MaterialTheme.colorScheme.primary) },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Email,
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
-            },
+        it.calculateTopPadding()
+
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        )
+                .padding(16.dp)
+        ) {
+            OutlinedTextField(
+                value = account.site,
+                onValueChange = { account.site = it },
+                readOnly = true,
+                label = { Text("Site", color = MaterialTheme.colorScheme.primary) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Email,
+                        contentDescription = null,
+                        tint = Color.Gray
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
 
-        OutlinedTextField(
-            value = account.category,
-            onValueChange = { account.category = it },
-            readOnly = true,
-            modifier = Modifier
-                .fillMaxWidth(),
-            label = { Text("Category") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Build,
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
-            }
-        )
+            OutlinedTextField(
+                value = account.category,
+                onValueChange = { account.category = it },
+                readOnly = true,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                label = { Text("Category") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Build,
+                        contentDescription = null,
+                        tint = Color.Gray
+                    )
+                }
+            )
 
-        OutlinedTextField(
-            value = account.username,
-            onValueChange = { account.username = it },
-            readOnly = true,
-            label = { Text("Username", color = MaterialTheme.colorScheme.primary) },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        )
+            OutlinedTextField(
+                value = account.username,
+                onValueChange = { account.username = it },
+                readOnly = true,
+                label = { Text("Username", color = MaterialTheme.colorScheme.primary) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = null,
+                        tint = Color.Gray
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
 
-        OutlinedTextField(
-            value = newPass!!,
-            onValueChange = { newPass = it
-            },
-            label = { Text("Password", color = MaterialTheme.colorScheme.primary) },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        )
+            OutlinedTextField(
+                value = newPass!!,
+                onValueChange = {
+                    newPass = it
+                },
+                label = { Text("Password", color = MaterialTheme.colorScheme.primary) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = null,
+                        tint = Color.Gray
+                    )
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
 
-        ExtendedFloatingActionButton(
-            icon = { Icon(Icons.Filled.Add, contentDescription = "Save") },
-            text = { Text("Save") },
-            onClick = {
-                account.password = SecurityEncrypt(context).putDataPass(newPass!!)
-                viewModel.updateAccount(account)
-                navController.navigate("openList")
-            }
-        )
+            ExtendedFloatingActionButton(
+                icon = { Icon(Icons.Filled.Add, contentDescription = "Save") },
+                text = { Text("Save") },
+                onClick = {
+                    account.password = SecurityEncrypt(context).putDataPass(newPass!!)
+                    viewModel.updateAccount(account)
+                    navController.navigate("openList")
+                }
+            )
+        }
     }
 }

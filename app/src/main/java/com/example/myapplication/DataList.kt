@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,13 +15,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +40,8 @@ import androidx.navigation.NavController
 import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DataList(viewModel: MainVM, navController: NavController, context: MainActivity) {
     viewModel.getData(1)
@@ -57,8 +63,22 @@ fun DataList(viewModel: MainVM, navController: NavController, context: MainActiv
         account = it
     }
     Scaffold(
-        floatingActionButton =
-        {
+        topBar = {
+            TopAppBar(
+                modifier = Modifier.background(Color.White), title = {
+                    IconButton(onClick = {
+                        navController.navigate("openList")
+                    }) {
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            tint = Color.Black,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
+            )
+        },
+        floatingActionButton = {
             FloatingActionButton(
                 content = { Icon(imageVector = Icons.Default.Add, contentDescription = "add") },
                 onClick = { navController.navigate("addData") }
@@ -66,8 +86,7 @@ fun DataList(viewModel: MainVM, navController: NavController, context: MainActiv
             FabPosition.End
         }
     ) {
-        it.calculateBottomPadding()
-        LazyColumn {
+        LazyColumn(modifier = Modifier.padding(top = it.calculateTopPadding())){
             items(account) { data ->
                 columnItem(data, viewModel, navController)
             }
@@ -77,7 +96,7 @@ fun DataList(viewModel: MainVM, navController: NavController, context: MainActiv
 }
 
 @Composable
-fun columnItem(data : Account, viewModel: MainVM, navController: NavController) {
+fun columnItem(data: Account, viewModel: MainVM, navController: NavController) {
     val brush = Brush.horizontalGradient(listOf(Color.LightGray, Color.White))
     Box(
         modifier = Modifier
@@ -88,9 +107,11 @@ fun columnItem(data : Account, viewModel: MainVM, navController: NavController) 
                 navController.navigate("dataOverview/$idAccount")
             }
     ) {
-        Row(modifier = Modifier.fillMaxWidth(),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column(
                 modifier = Modifier
                     .padding(14.dp)

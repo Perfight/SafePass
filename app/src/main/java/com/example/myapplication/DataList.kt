@@ -17,6 +17,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -87,7 +89,7 @@ fun DataList(viewModel: MainVM, navController: NavController, context: MainActiv
             FabPosition.End
         }
     ) {
-        LazyColumn(modifier = Modifier.padding(top = it.calculateTopPadding())){
+        LazyColumn(modifier = Modifier.padding(top = it.calculateTopPadding())) {
             items(account) { data ->
                 columnItem(data, viewModel, navController)
             }
@@ -99,6 +101,7 @@ fun DataList(viewModel: MainVM, navController: NavController, context: MainActiv
 @Composable
 fun columnItem(data: Account, viewModel: MainVM, navController: NavController) {
     val brush = Brush.horizontalGradient(listOf(Color(0xFFe8b7dd), Color.White))
+    val openDialog = remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -121,8 +124,7 @@ fun columnItem(data: Account, viewModel: MainVM, navController: NavController) {
                 Text(text = data.username, fontSize = 12.sp)
             }
             IconButton(onClick = {
-                viewModel.deleteData(data)
-                navController.navigate("openList")
+                openDialog.value = true
             }) {
                 Icon(
                     modifier = Modifier.defaultMinSize(40.dp, 28.dp),
@@ -132,5 +134,30 @@ fun columnItem(data: Account, viewModel: MainVM, navController: NavController) {
                 )
             }
         }
+    }
+
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = { openDialog.value = false },
+            title = { Text(text = "Do you want to delete it?")},
+            confirmButton = {
+                Button(
+                    onClick = {
+                        openDialog.value = false
+                        viewModel.deleteData(data)
+                        navController.navigate("openList")
+                    }
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { openDialog.value = false }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 }

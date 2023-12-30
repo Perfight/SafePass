@@ -192,7 +192,7 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
             .fillMaxWidth()
             .fillMaxHeight(0.15f)
             .clickable {
-                /*TODO*/
+                navController.navigate("generate")
             }
             .background(
                 Brush.verticalGradient(listOf(Color(0xFFfae1f4), Color.White)),

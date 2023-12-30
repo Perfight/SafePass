@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -186,11 +187,37 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
                 }
             }
         }
+
         Box(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.15f)
             .clickable {
                 /*TODO*/
+            }
+            .background(
+                Brush.verticalGradient(listOf(Color(0xFFfae1f4), Color.White)),
+                RoundedCornerShape(10.dp)
+            ),
+            contentAlignment = Alignment.Center,
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(imageVector = Icons.Outlined.Build, contentDescription = null)
+                Text(text = "Generate new password")
+                Icon(imageVector = Icons.Default.Add, contentDescription = null)
+            }
+        }
+
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.15f)
+            .clickable {
+                navController.navigate("otherUsers")
             }
             .background(
                 Brush.verticalGradient(listOf(Color(0xFFfae1f4), Color.White)),

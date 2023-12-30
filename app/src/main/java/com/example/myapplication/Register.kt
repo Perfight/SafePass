@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -111,11 +112,14 @@ fun Register(viewModel: MainVM, navController: NavController, context: MainActiv
             icon = { Icon(Icons.Filled.Person, contentDescription = "Register") },
             text = { Text("Register") },
             onClick = {
-                viewModel.insertUser(username, email, hash(password))
-                navController.navigate("main")
+                if (username != "" && email != "" && password != "") {
+                    viewModel.insertUser(username, email, hash(password))
+                    navController.navigate("main")
+                } else {
+                    Toast.makeText(context, "Incorrect", Toast.LENGTH_SHORT).show()
+                }
             }
         )
-
         Spacer(modifier = Modifier.fillMaxHeight(0.2f))
     }
 }

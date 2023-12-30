@@ -5,23 +5,6 @@ import android.content.ClipboardManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,7 +13,6 @@ import androidx.navigation.navArgument
 import com.example.myapplication.data.Dependencies
 import com.example.myapplication.data.MainVM
 import com.example.myapplication.encrypt.SecurityEncrypt
-import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("NewApi")
@@ -55,6 +37,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("registration"){
                     Register(viewModel, navController, this@MainActivity)
+                }
+                composable("otherUsers"){
+                    UsersList(viewModel, navController, this@MainActivity)
                 }
                 composable("home"){
                     HomeScreen(viewModel, navController, this@MainActivity)
@@ -84,9 +69,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/*
 @Composable
 fun PasswordGeneratorScreen(clipboard: ClipboardManager) {
-    var password by remember { mutableStateOf(generatePassword(12)) }
+    //var password by remember { mutableStateOf(generatePassword(12)) }
     var copiedToClipboard by remember { mutableStateOf(false) }
 
     Row(
@@ -107,7 +93,7 @@ fun PasswordGeneratorScreen(clipboard: ClipboardManager) {
 
         IconButton(
             onClick = {
-                password = generatePassword(12)
+                //password = generatePassword(12)
                 copiedToClipboard = false
             },
             modifier = Modifier
@@ -128,11 +114,32 @@ fun PasswordGeneratorScreen(clipboard: ClipboardManager) {
     }
 }
 
-fun generatePassword(length: Int): String {
-    val charPool: List<Char> =
-        ('a'..'z') + ('A'..'Z') + ('0'..'9') + listOf('!', '@', '#', '$', '%', '^', '&', '*')
-    return (1..length)
-        .map { Random.nextInt(0, charPool.size) }
-        .map(charPool::get)
-        .joinToString("")
-}
+fun generatePassword(
+    isWithLetters: Boolean,
+    isWithUppercase: Boolean,
+    isWithNumbers: Boolean,
+    isWithSpecial: Boolean,
+): String {
+    val letters : String = "abcdefghijklmnopqrstuvwxyz"
+    val uppercaseLetters : String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    val numbers : String = "0123456789"
+    val special : String = "@#=+!£$%&?-"
+
+    val charSets = mutableListOf<String>()
+
+    if (isWithLetters) { charSets.add(letters) }
+    if (isWithUppercase) { charSets.add(uppercaseLetters) }
+    if (isWithNumbers) { charSets.add(numbers) }
+    if (isWithSpecial) { charSets.add(special) }
+
+    if (charSets.size < 1) { return "" }
+
+    var result = charSets.joinToString("")
+    if (isWithLetters && isWithUppercase && isWithNumbers && isWithSpecial) {
+        result += "${letters.random()}${uppercaseLetters.random()}${numbers.random()}${special.random()}"
+    }
+
+    result = result.toList().shuffled().joinToString("")
+
+    return result.substring(0, 8.coerceAtMost(result.length))
+}*/

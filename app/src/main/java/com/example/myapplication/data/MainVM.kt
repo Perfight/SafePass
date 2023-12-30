@@ -11,7 +11,6 @@ class MainVM(private val managerRepository: Repository) : ViewModel() {
     var accountInformation: MutableLiveData<Account> = MutableLiveData()
     var userData: MutableLiveData<User> = MutableLiveData()
     var userList: MutableLiveData<List<User>> = MutableLiveData()
-    var listCategory : MutableLiveData<List<Account>> = MutableLiveData()
     var currentUser : MutableLiveData<User> = MutableLiveData()
 
     fun insertData(username: String, password: String, category: String, site: String, user: Int) {

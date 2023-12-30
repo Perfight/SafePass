@@ -73,7 +73,6 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: Context) 
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(it.calculateTopPadding())
-                .padding(6.dp)
         ) {
             OutlinedTextField(
                 value = website,

@@ -105,12 +105,13 @@ fun Auth(viewModel: MainVM, navController: NavController, context: MainActivity)
                 icon = { Icon(Icons.Filled.Check, contentDescription = "Log in") },
                 text = { Text("Log in") },
                 onClick = {
-                    if (username != "" && password != "") {
+                    if (username != "" || password != "") {
                         viewModel.getAuthInfo(username)
                         viewModel.currentUser.observe(context) {
                             intendedUser = it
                             if (hash(password) == intendedUser.password) {
                                 SecurityEncrypt(context).putData("user_id", intendedUser.idUser)
+                                navController.popBackStack()
                                 navController.navigate("home")
                             } else {
                                 Toast.makeText(
@@ -120,13 +121,6 @@ fun Auth(viewModel: MainVM, navController: NavController, context: MainActivity)
                                 ).show()
                             }
                         }
-
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "You're a bad person...",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
                 }
             )
@@ -134,6 +128,7 @@ fun Auth(viewModel: MainVM, navController: NavController, context: MainActivity)
                 icon = { Icon(Icons.Filled.Person, contentDescription = "Register") },
                 text = { Text("Register") },
                 onClick = {
+                    navController.popBackStack()
                     navController.navigate("registration")
                 }
             )

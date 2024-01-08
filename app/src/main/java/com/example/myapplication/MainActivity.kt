@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
-            if (SecurityEncrypt(this@MainActivity).containsKey("user_id")){
+            if (SecurityEncrypt(this@MainActivity).containsKey("user_id")) {
                 start = "home"
             }
             NavHost(
@@ -35,38 +35,37 @@ class MainActivity : ComponentActivity() {
                 composable("main") {
                     Auth(viewModel, navController, this@MainActivity)
                 }
-                composable("registration"){
+                composable("registration") {
                     Register(viewModel, navController, this@MainActivity)
                 }
-                composable("otherUsers"){
+                composable("otherUsers") {
                     UsersList(viewModel, navController, this@MainActivity)
                 }
-                composable("home"){
+                composable("home") {
                     HomeScreen(viewModel, navController, this@MainActivity)
                 }
-                composable("addData"){
+                composable("addData") {
                     SaveData(viewModel, navController, this@MainActivity)
                 }
                 composable("openList") {
                     DataList(viewModel, navController, this@MainActivity)
                 }
-                composable("generate"){
-                    CustomPassword(navController, this@MainActivity, clipboard)
+                composable("generate") {
+                    CustomPassword(this@MainActivity, clipboard)
                 }
-                composable("dataOverview/{idAccount}",
+                composable(
+                    "dataOverview/{idAccount}",
                     arguments = listOf(navArgument("idAccount") { type = NavType.IntType })
-                    ){backStackEntry ->
+                ) { backStackEntry ->
                     val argumentValue = backStackEntry.arguments?.getInt("idAccount") ?: 1
-                    DataOverview(viewModel, navController, this@MainActivity, clipboard, argumentValue)
+                    DataOverview(
+                        viewModel,
+                        navController,
+                        this@MainActivity,
+                        clipboard,
+                        argumentValue
+                    )
                 }
-                /*
-                * HomeScreen() -- if authorisized
-                * SaveData() -- after home|overview
-                * DataDisplay() -- after home -- list
-                * DataOverview() -- last activity --
-                * Auth() -- first activity|home
-                * Register() -- auth -> register -> home
-                * */
             }
         }
     }

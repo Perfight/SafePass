@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -19,15 +18,11 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +36,6 @@ import androidx.navigation.NavController
 import com.example.myapplication.data.MainVM
 import com.example.myapplication.encrypt.SecurityEncrypt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("NewApi", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SaveData(viewModel: MainVM, navController: NavController, context: Context) {
@@ -55,117 +49,104 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: Context) 
 
     var iconClickable by remember { mutableStateOf(true) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(title = {
-                IconButton(onClick = {
-                    navController.navigate("openList")
-                }) {
-                    Icon(
-                        Icons.Filled.ArrowBack,
-                        contentDescription = "Back"
-                    )
-                }
-            })
-        }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
-        Column(
+        OutlinedTextField(
+            value = website,
+            onValueChange = { website = it },
+            label = { Text("Site", color = MaterialTheme.colorScheme.primary) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Email,
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
+            },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = it.calculateTopPadding())
-        ) {
+                .padding(vertical = 8.dp)
+        )
+
+        Box {
             OutlinedTextField(
-                value = website,
-                onValueChange = { website = it },
-                label = { Text("Site", color = MaterialTheme.colorScheme.primary) },
+                value = selectedCategory,
+                onValueChange = { selectedCategory = it },
+                readOnly = true,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                label = { Text("Category", color = MaterialTheme.colorScheme.primary) },
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Default.Email,
+                        imageVector = Icons.Default.Build,
                         contentDescription = null,
                         tint = Color.Gray
                     )
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                trailingIcon = {
+                    Icon(Icons.Default.KeyboardArrowDown, "contentDescription",
+                        Modifier.clickable { expanded = !expanded })
+                }
             )
-
-            Box {
-                OutlinedTextField(
-                    value = selectedCategory,
-                    onValueChange = { selectedCategory = it },
-                    readOnly = true,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    label = { Text("Category", color = MaterialTheme.colorScheme.primary) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Build,
-                            contentDescription = null,
-                            tint = Color.Gray
-                        )
-                    },
-                    trailingIcon = {
-                        Icon(Icons.Default.KeyboardArrowDown, "contentDescription",
-                            Modifier.clickable { expanded = !expanded })
-                    }
-                )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .defaultMinSize(50.dp, 50.dp)
-                ) {
-                    listOfCategories.forEach { category ->
-                        DropdownMenuItem(
-                            text = { Text(text = category) },
-                            onClick = {
-                                selectedCategory = category
-                            })
-                    }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier
+                    .defaultMinSize(50.dp, 50.dp)
+            ) {
+                listOfCategories.forEach { category ->
+                    DropdownMenuItem(
+                        text = { Text(text = category) },
+                        onClick = {
+                            selectedCategory = category
+                        })
                 }
             }
+        }
 
-            OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Username", color = MaterialTheme.colorScheme.primary) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = null,
-                        tint = Color.Gray
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            )
+        OutlinedTextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Username", color = MaterialTheme.colorScheme.primary) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        )
 
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password", color = MaterialTheme.colorScheme.primary) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = null,
-                        tint = Color.Gray
-                    )
-                },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            )
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password", color = MaterialTheme.colorScheme.primary) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
+            },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        )
 
 
-            ExtendedFloatingActionButton(
-                icon = { Icon(Icons.Filled.Add, contentDescription = "Save") },
-                text = { Text("Save") },
-                onClick = {
+        ExtendedFloatingActionButton(
+            icon = { Icon(Icons.Filled.Add, contentDescription = "Save") },
+            text = { Text("Save") },
+            onClick = {
+                if (username != "" || password != "" || selectedCategory != "" || website != "") {
                     viewModel.insertData(
                         username,
                         SecurityEncrypt(context).putDataPass(password),
@@ -173,10 +154,11 @@ fun SaveData(viewModel: MainVM, navController: NavController, context: Context) 
                         website,
                         SecurityEncrypt(context).getData("user_id", 0)
                     )
-                    iconClickable = false
+                    navController.popBackStack()
                     navController.navigate("openList")
+                    iconClickable = false
                 }
-            )
-        }
+            }
+        )
     }
 }

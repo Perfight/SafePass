@@ -114,6 +114,7 @@ fun Register(viewModel: MainVM, navController: NavController, context: MainActiv
             onClick = {
                 if (username != "" && email != "" && password != "") {
                     viewModel.insertUser(username, email, hash(password))
+                    navController.popBackStack()
                     navController.navigate("main")
                 } else {
                     Toast.makeText(context, "Incorrect", Toast.LENGTH_SHORT).show()

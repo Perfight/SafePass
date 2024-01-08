@@ -62,6 +62,7 @@ fun UsersList(viewModel: MainVM, navController: NavController, context: MainActi
             TopAppBar(
                 modifier = Modifier.background(Color.White), title = {
                     IconButton(onClick = {
+                        navController.popBackStack()
                         navController.navigate("home")
                     }) {
                         Icon(
@@ -77,6 +78,7 @@ fun UsersList(viewModel: MainVM, navController: NavController, context: MainActi
             FloatingActionButton(
                 content = { Icon(imageVector = Icons.Default.Add, contentDescription = "add") },
                 onClick = {
+                    navController.popBackStack()
                     navController.navigate("registration")
                 }
             )
@@ -100,6 +102,7 @@ fun userItem(user: User, navController: NavController, context: MainActivity) {
             .background(brush, RoundedCornerShape(20.dp))
             .clickable {
                 SecurityEncrypt(context).putData("user_id", user.idUser)
+                navController.popBackStack()
                 navController.navigate("home")
             }
     ) {

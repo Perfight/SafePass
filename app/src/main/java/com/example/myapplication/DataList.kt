@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,18 +14,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,8 +39,6 @@ import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
 import com.example.myapplication.encrypt.SecurityEncrypt
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DataList(viewModel: MainVM, navController: NavController, context: MainActivity) {
     viewModel.getData(SecurityEncrypt(context).getData("user_id", 1))
@@ -66,25 +60,13 @@ fun DataList(viewModel: MainVM, navController: NavController, context: MainActiv
         account = it
     }
     Scaffold(
-        topBar = {
-            TopAppBar(
-                modifier = Modifier.background(Color.White), title = {
-                    IconButton(onClick = {
-                        navController.navigate("home")
-                    }) {
-                        Icon(
-                            Icons.Filled.ArrowBack,
-                            tint = Color.Black,
-                            contentDescription = "Back"
-                        )
-                    }
-                }
-            )
-        },
         floatingActionButton = {
             FloatingActionButton(
                 content = { Icon(imageVector = Icons.Default.Add, contentDescription = "add") },
-                onClick = { navController.navigate("addData") }
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate("addData")
+                }
             )
             FabPosition.End
         }
@@ -108,6 +90,7 @@ fun columnItem(data: Account, viewModel: MainVM, navController: NavController) {
             .background(brush, RoundedCornerShape(20.dp))
             .clickable {
                 val idAccount = data.id
+                navController.popBackStack()
                 navController.navigate("dataOverview/$idAccount")
             }
     ) {

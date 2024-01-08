@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -32,8 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,22 +41,22 @@ import com.example.myapplication.data.User
 import com.example.myapplication.encrypt.SecurityEncrypt
 
 @Composable
-fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainActivity){
-    val userId= SecurityEncrypt(context).getData("user_id", 0)
+fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainActivity) {
+    val userId = SecurityEncrypt(context).getData("user_id", 0)
     viewModel.getUserInfo(userId)
-    var user by remember { mutableStateOf(User(0, "","","")) }
-    viewModel.userData.observe(context){
+    var user by remember { mutableStateOf(User(0, "", "", "")) }
+    viewModel.userData.observe(context) {
         user = it
     }
     viewModel.getData(userId)
-    var all by remember { mutableStateOf(emptyList<Account>())}
-    viewModel.accounts.observe(context){all = it}
+    var all by remember { mutableStateOf(emptyList<Account>()) }
+    viewModel.accounts.observe(context) { all = it }
     viewModel.getAccountCounter(userId)
 
     var divide by remember {
         mutableStateOf(emptyMap<String, Int>())
     }
-    viewModel.accountCounterList.observe(context){
+    viewModel.accountCounterList.observe(context) {
         divide = it
     }
 
@@ -75,129 +72,104 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
     ) {
         Text(text = "Hello, ${user.name}", fontSize = 28.sp, fontStyle = FontStyle.Italic)
         Spacer(Modifier.fillMaxHeight(0.1f))
-        LazyRow(
-            Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.5f)
+        Card(
+            modifier = Modifier.clickable {
+                navController.navigate("openList")
+            },
+            border = BorderStroke(2.dp, Color.LightGray)
         ) {
-            item {
-                Card(
-                    modifier = Modifier.clickable {
-                        navController.navigate("openList")
-                    },
-                    border = BorderStroke(2.dp, Color.LightGray)
+            Row {
+                Image(
+                    imageVector = Icons.Default.List,
+                    contentDescription = null,
+                    modifier = Modifier.size(180.dp, 180.dp)
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight(0.2f)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxHeight(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            imageVector = Icons.Default.List,
-                            contentDescription = null,
-                            modifier = Modifier.size(180.dp, 180.dp)
-                        )
-                        Text(text = "All")
-                        Text(text = "Contains : " + all.size)
-                    }
+                    Text(text = "All")
+                    Text(text = "Contains : " + all.size)
                 }
             }
-            item {
-                Card(modifier = Modifier.clickable {
-                    navController.navigate("openList")
-                },
-                    border = BorderStroke(2.dp, Color.LightGray)
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Card(
+                border = BorderStroke(2.dp, Color.LightGray)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight(0.1f)
+                        .fillMaxWidth(0.25f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxHeight(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            bitmap = ImageBitmap.imageResource(R.drawable.app),
-                            contentDescription = "app",
-                            modifier = Modifier.size(180.dp, 180.dp)
-                        )
-                        Text(text = "Application")
-                        Text(text = "Contains: " + divide["Application"].toString())
-                    }
+                    Text(text = "Application")
+                    Text(text = "Contains: " + divide["Application"].toString())
                 }
             }
-            item {
-                Card(modifier = Modifier.clickable {
-                    navController.navigate("openList")
-                },
-                    border = BorderStroke(2.dp, Color.LightGray)
+            Card(
+                border = BorderStroke(2.dp, Color.LightGray)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight(0.1f)
+                        .fillMaxWidth(0.32f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxHeight(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            bitmap = ImageBitmap.imageResource(R.drawable.cloud),
-                            contentDescription = "cloud",
-                            modifier = Modifier.size(180.dp, 180.dp)
-                        )
-                        Text(text = "Cloud")
-                        Text(text = "Contains : " + divide["Cloud"].toString())
-                    }
+                    Text(text = "Cloud")
+                    Text(text = "Contains : " + divide["Cloud"].toString())
                 }
             }
-            item {
-                Card(modifier = Modifier.clickable {
-                    navController.navigate("openList")
-                },
-                    border = BorderStroke(2.dp, Color.LightGray)
+            Card(
+                border = BorderStroke(2.dp, Color.LightGray)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight(0.1f)
+                        .fillMaxWidth(0.45f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxHeight(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            bitmap = ImageBitmap.imageResource(R.drawable.pay),
-                            contentDescription = null,
-                            modifier = Modifier.size(180.dp, 180.dp)
-                        )
-                        Text(text = "Payment")
-                        Text(text = "Contains : " + divide["Payment"].toString())
-                    }
+                    Text(text = "Payment")
+                    Text(text = "Contains : " + divide["Payment"].toString())
                 }
             }
-            item {
-                Card(modifier = Modifier.clickable {
-                    navController.navigate("openList")
-                },
-                    border = BorderStroke(2.dp, Color.LightGray)
+            Card(
+                border = BorderStroke(2.dp, Color.LightGray)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight(0.1f)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxHeight(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            bitmap = ImageBitmap.imageResource(R.drawable.web),
-                            contentDescription = null,
-                            modifier = Modifier.size(180.dp, 180.dp)
-                        )
-                        Text(text = "Website")
-                        Text(text = "Contains : " + divide["Website"].toString())
-                    }
+                    Text(text = "Website")
+                    Text(text = "Contains : " + divide["Website"].toString())
                 }
             }
         }
 
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.15f)
-            .clickable {
-                navController.navigate("generate")
-            }
-            .background(
-                Brush.verticalGradient(listOf(Color(0xFFfae1f4), Color.White)),
-                RoundedCornerShape(10.dp)
-            ),
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.15f)
+                .clickable {
+                    navController.navigate("generate")
+                }
+                .background(
+                    Brush.verticalGradient(listOf(Color(0xFFfae1f4), Color.White)),
+                    RoundedCornerShape(10.dp)
+                ),
             contentAlignment = Alignment.Center,
         ) {
             Row(
@@ -213,18 +185,19 @@ fun HomeScreen(viewModel: MainVM, navController: NavController, context: MainAct
         }
 
 
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.15f)
-            .clickable {
-                navController.navigate("otherUsers")
-            }
-            .background(
-                Brush.verticalGradient(listOf(Color(0xFFfae1f4), Color.White)),
-                RoundedCornerShape(10.dp)
-            ),
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.15f)
+                .clickable {
+                    navController.navigate("otherUsers")
+                }
+                .background(
+                    Brush.verticalGradient(listOf(Color(0xFFfae1f4), Color.White)),
+                    RoundedCornerShape(10.dp)
+                ),
             contentAlignment = Alignment.Center,
-            ) {
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),

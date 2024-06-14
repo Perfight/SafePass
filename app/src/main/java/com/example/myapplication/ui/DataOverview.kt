@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -34,6 +34,8 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.myapplication.MainActivity
+import com.example.myapplication.R
 import com.example.myapplication.data.Account
 import com.example.myapplication.data.MainVM
 import com.example.myapplication.encrypt.SecurityEncrypt

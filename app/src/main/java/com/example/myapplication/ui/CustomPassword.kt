@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -32,6 +32,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.MainActivity
+import com.example.myapplication.R
 
 @Composable
 fun CustomPassword(

@@ -13,6 +13,14 @@ import androidx.navigation.navArgument
 import com.example.myapplication.data.Dependencies
 import com.example.myapplication.data.MainVM
 import com.example.myapplication.encrypt.SecurityEncrypt
+import com.example.myapplication.ui.Auth
+import com.example.myapplication.ui.CustomPassword
+import com.example.myapplication.ui.DataList
+import com.example.myapplication.ui.DataOverview
+import com.example.myapplication.ui.HomeScreen
+import com.example.myapplication.ui.Register
+import com.example.myapplication.ui.SaveData
+import com.example.myapplication.ui.UsersList
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("NewApi")

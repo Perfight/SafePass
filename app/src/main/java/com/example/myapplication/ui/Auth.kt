@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -33,6 +33,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.myapplication.MainActivity
+import com.example.myapplication.R
 import com.example.myapplication.data.MainVM
 import com.example.myapplication.data.User
 import com.example.myapplication.encrypt.SecurityEncrypt
@@ -121,6 +123,12 @@ fun Auth(viewModel: MainVM, navController: NavController, context: MainActivity)
                                 ).show()
                             }
                         }
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Check your data!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             )

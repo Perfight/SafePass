@@ -21,19 +21,19 @@
 * Jetpack Compose
 * SQLite
 # Разработчик
-Разработчиком мобильного приложения является Анастасия Анашкина, студентка ит-колледжа [prayfortherain](https://github.com/prayfortherain/)
+Разработчиком мобильного приложения является Илья Титов, студент ит-колледжа
 # Установка
 
-* Перейти по [ссылке](https://github.com/prayfortherain/SafePass), во вкладке релизы выбрать последний и скачать apk-файл
+* Перейти по [ссылке](https://github.com/Perfight/SafePass), во вкладке релизы выбрать последний и скачать apk-файл
 
 * Открыть установщик и запустить приложение
 
 # Документация
 **Пользовательское руководство:**
-* [Руководство](https://github.com/prayfortherain/SafePass/wiki/7.-Руководство-пользователя)
+* [Руководство](https://github.com/Perfight/SafePass/wiki/7.-Руководство-пользователя)
 
 
 **Документация разработки:**
-* [Техническое задание](https://github.com/prayfortherain/SafePass/wiki/1.-ТЗ)
-* [Спецификация](https://github.com/prayfortherain/SafePass/wiki/2.-Спецификация)
-* [Функциональные требования](https://github.com/prayfortherain/SafePass/wiki/3.-Функциональные-требования)
+* [Техническое задание](https://github.com/Perfight/SafePass/wiki/1.-ТЗ)
+* [Спецификация](https://github.com/Perfight/SafePass/wiki/2.-Спецификация)
+* [Функциональные требования](https://github.com/Perfight/SafePass/wiki/3.-Функциональные-требования)
